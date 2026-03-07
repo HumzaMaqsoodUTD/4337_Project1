@@ -133,3 +133,14 @@ Error: Invalid Expression
 > 
 
 Overall the testing seems to be fine, and the quality of life updates went smoothly! I'm really happy with how that went!!
+
+3/6/26 9:30 pm
+Session 5: Wrapping it all up for submission
+
+In this final session I reviewed the entire project and prepared everything for submission. I double-checked the repository structure, made sure the latest version of the code was committed, and verified that all required files were present. I also reread through the dev log to ensure each session accurately reflected the work that was done throughout the project without editing or deleting any previous commits. Since most of the core functionality had already been verified in the previous session, this stage was mainly about confirming that everything was organized properly and ready to be turned in.
+
+Looking back on the project, one of the biggest takeaways for me was the importance of breaking a problem down into smaller tasks. At the beginning I tried thinking about the project in terms of how much I could get done in a certain amount of time, but that approach was too vague and made it harder to plan effectively. Switching to goal-based sessions helped a lot, because it gave each stage of the project a clear purpose. Another lesson I took away from this was how important it is to manage version control carefully. My mistake earlier with committing to the wrong branch was a good reminder to pay closer attention to my workflow when using tools like GitHub Desktop.
+
+Overall this project was a good exercise in recursive thinking and parsing structured input. Implementing the prefix expression evaluator required careful handling of character-level parsing, recursion, and validation of input. By building the program piece by piece—first the parser helpers, then the operator logic, then the history system, and finally the integration with the main loop, I was able to gradually develop a working solution while testing each component along the way. With everything now tested and organized, the project is ready for submission!
+
+Also note, I thought about having session 5 just push to the main branch, and figured it was ok this time since it was on purpose as there was no code involved. This, however, made me stop for a moment as it still broke the protocol I was trying to enforece in terms of structure. So this time, I actually rolled back the push and commit, and then made a proper session 5 branch to work on, and a then merge it to main, as is required by my setup.
