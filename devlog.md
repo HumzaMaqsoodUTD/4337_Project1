@@ -43,3 +43,8 @@ In Session 2, the project moved beyond the basic skeleton from Session 1 and beg
 One issue that came up during this session was with loading mode.rkt. At first, I tried using require, then switched to include, and ran into repeated errors involving prompt? being undefined. After checking both files more carefully, I realized the issue came from how mode.rkt was structured and how it was being referenced from the main file. I decided not to modify the provided mode.rkt file directly and instead adjusted the way it was loaded so that prompt? could be accessed without changing the assignment file itself. That debugging process took some extra time, but it resolved the import problem and let me keep building the parser without changing the provided support file.
 
 note to self, start next project earlier
+
+3/6/26 7:29 pm
+Session 3: History and Expression Validation
+
+I made a big whoopsie. I thought I was working on session 2 branch, but I had actually been on main the whole time. I had downloaded github desktop as my version tracker, and forgot to switch to branch "session 2" on there. So you'll see Session 2 and Session 1 as matching. What actually happened is as stated before. I've taken the opportunity to reflect on my dumb mistake, and now have verified that I am currently working on branch 3. The reason I did not reverse the commit and recommit off branch 2, is that the version I committed was actually what I would have merged anyways. In a way, I saved myself some time, but it was through a bad practice that should not be repeated. That being said, lets start session 3!

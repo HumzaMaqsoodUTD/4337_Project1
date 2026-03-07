@@ -30,6 +30,28 @@
        (list (string->number (list->string (reverse digits))) rest)]))
   (collect '() chars))
 
+;; look up a value from history by id
+(define (history-ref n history)
+  (if (or (< n 1) (> n (length history)))
+      #f
+      (list-ref (reverse history) (- n 1))))
+
+;; parse a history reference like $1 or $2
+(define (parse-history chars history)
+  (define (collect digits rest)
+    (cond
+      [(and (not (null? rest)) (char-numeric? (car rest)))
+       (collect (cons (car rest) digits) (cdr rest))]
+      [else
+       (if (null? digits)
+           #f
+           (let* ([num (string->number (list->string (reverse digits)))]
+                  [val (history-ref num history)])
+             (if val
+                 (list val rest)
+                 #f)))]))
+  (collect '() (cdr chars)))
+
 ;; unary negation
 (define (eval-negate chars history)
   (let* ([rest (skip-whitespace (cdr chars))]
@@ -77,6 +99,18 @@
               (list (quotient (first left-result) (first right-result))
                     (second right-result)))))))
 
+;; evaluate one full input line
+;; returns the final numeric value or #f if invalid
+(define (evaluate-line line history)
+  (let* ([chars (string->list line)]
+         [result (eval-expression chars history)])
+    (if result
+        (let ([remaining (skip-whitespace (second result))])
+          (if (null? remaining)
+              (first result)
+              #f))
+        #f)))
+
 ;; main entry point
 (define (main)
   (eval-loop '()))
@@ -92,9 +126,19 @@
       [(eof-object? line) (void)]
       [(string=? line "quit") (void)]
       [else
-       ;; evaluation logic will be expanded in later sessions
-       (displayln "Error: Invalid Expression")
-       (eval-loop history)])))
+       (let ([value (evaluate-line line history)])
+         (if value
+             (let ([new-history (cons value history)]
+                   [id (+ (length history) 1)])
+               (displayln
+                (string-append
+                 (number->string id)
+                 ": "
+                 (number->string (real->double-flonum value))))
+               (eval-loop new-history))
+             (begin
+               (displayln "Error: Invalid Expression")
+               (eval-loop history))))])))
 
 ;; expression evaluator
 ;; returns (list value remaining-chars) or #f on error
@@ -104,6 +148,8 @@
       [(null? chars) #f]
       [(char-numeric? (car chars))
        (parse-number chars)]
+      [(char=? (car chars) #\$)
+       (parse-history chars history)]
       [(char=? (car chars) #\-)
        (eval-negate chars history)]
       [(char=? (car chars) #\+)
