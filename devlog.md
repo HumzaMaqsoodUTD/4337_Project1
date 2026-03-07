@@ -48,3 +48,33 @@ note to self, start next project earlier
 Session 3: History and Expression Validation
 
 I made a big whoopsie. I thought I was working on session 2 branch, but I had actually been on main the whole time. I had downloaded github desktop as my version tracker, and forgot to switch to branch "session 2" on there. So you'll see Session 2 and Session 1 as matching. What actually happened is as stated before. I've taken the opportunity to reflect on my dumb mistake, and now have verified that I am currently working on branch 3. The reason I did not reverse the commit and recommit off branch 2, is that the version I committed was actually what I would have merged anyways. In a way, I saved myself some time, but it was through a bad practice that should not be repeated. That being said, lets start session 3!
+
+In this session I connected the parser that was built earlier to the main evaluation loop so that user input could actually be evaluated instead of always returning the placeholder error message. I implemented a helper function that converts each input line into a list of characters and passes it to the parser, then verifies that the entire expression was consumed. If any extra characters remain after parsing, the program treats the expression as invalid. This ensures partially valid inputs such as "+1 2 3" or "+1 2 2" are correctly rejected rather than evaluated incorrectly.
+
+I also implemented the history system required by the assignment. Successful results are now stored in a history list and can be referenced later using the "$n" syntax. Because new results are added to the front of the history list using cons, I added logic to correctly retrieve values based on their original ID order. I updated the evaluation loop so that valid expressions print their result with an ID number and invalid expressions display the required error message. During testing I verified that valid prefix expressions, nested expressions, history references, and several invalid cases such as divide-by-zero and malformed expressions all behaved correctly.
+
+here are my test cases:
+
+Language: racket, with debugging; memory limit: 128 MB.
+> 5
+1: 5.0
+> 5
+2: 5.0
+> +1 2
+3: 3.0
+> *2 3
+4: 6.0
+> +$1 $2
+5: 10.0
+> +1 2 3
+Error: Invalid Expression
+> +1 2 2
+Error: Invalid Expression
+> $0
+Error: Invalid Expression
+> /5 0
+Error: Invalid Expression
+> quit
+> 
+
+Just copied it straight from DrRacket
