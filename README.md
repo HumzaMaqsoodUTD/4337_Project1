@@ -1,5 +1,5 @@
 # 4337_Project1
-prefix-notation calculator in Racket
+Prefix-notation calculator in Racket  
 Author: Humza Maqsood - DAL934177
 
 ## Overview
@@ -7,6 +7,20 @@ Author: Humza Maqsood - DAL934177
 This project implements a prefix expression calculator written in Racket. The program reads expressions from standard input, evaluates them using recursive parsing, and stores the results of successful evaluations in a history list. The calculator continues running until the user enters the command `quit`.
 
 Expressions are written in prefix notation, meaning the operator appears before its operands. The program supports nested expressions, history references, and basic arithmetic operations.
+
+## Repository Files
+
+`project1.rkt`  
+Main program implementation. Contains the evaluation loop, recursive parser, arithmetic operations, history system, and expression validation.
+
+`mode.rkt`  
+Provided helper file used to determine whether the program is running in interactive mode or batch mode. This file was not modified.
+
+`README.md`  
+Documentation describing the project, file structure, and instructions for running the program.
+
+`devlog.md` (or development log file)  
+Development log describing the design process and the work completed during each implementation session.
 
 ## Supported Operations
 
@@ -22,13 +36,13 @@ The calculator supports the following types of expressions:
 History references allow previously computed results to be reused in later expressions.
 
 ## Example Input
-
 5
 +1 2
 *2 3
 +*2 3 4
 +$1 $2
 -5
+
 
 ## Example Output
 
@@ -41,6 +55,7 @@ History references allow previously computed results to be reused in later expre
 +$1 $2
 4: 8.0
 
+
 Each successful expression is assigned a sequential ID and stored in history. The `$n` syntax retrieves the result with the corresponding ID.
 
 ## Error Handling
@@ -52,7 +67,7 @@ Error: Invalid Expression
 
 Examples of invalid expressions include:
 
-- Expressions with extra tokens (e.g., `+1 2 3`)
+- Expressions with extra tokens (for example `+1 2 3`)
 - Invalid history references such as `$0`
 - Division by zero
 - Non-numeric input
@@ -60,7 +75,7 @@ Examples of invalid expressions include:
 
 ## Program Structure
 
-The program is organized around a few main components.
+The program is organized around several main components.
 
 ### `main`
 
@@ -101,6 +116,7 @@ Example:
 +$1 $2
 3: 13.0
 
+
 ## Interactive vs Batch Mode
 
 The program supports both interactive and batch execution through the provided `mode.rkt` file.
@@ -116,9 +132,11 @@ Interactive mode:
 
 racket project1.rkt
 
+
 Batch mode:
 
 racket project1.rkt -b
+
 
 ## Testing
 
@@ -140,7 +158,10 @@ Additional tests included nested expressions, whitespace variations, and history
 
 The project was implemented incrementally by dividing the work into several sessions. The parser was built first, followed by the operator logic, history support, and final integration with the evaluation loop. This approach made it easier to isolate bugs and verify each feature before moving on to the next part of the implementation.
 
+## Notes for the TA
+
+The program was tested with both valid and invalid expressions to verify correct parsing and error handling. The development log included in the repository documents the design process, debugging steps, and implementation decisions made during the project.
+
 ## Author
 
 Humza Maqsood - DAL934177
-
