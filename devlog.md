@@ -32,3 +32,14 @@ Session 2: Core Parser Implementation
 Session 3: History System and Expression Validation
 Session 4: Program Integration and Final Testing
 Session 5: Debug unresolved issues and submit
+
+Quick addendum, the date is supposed to be -3/6/2026- in the log above this
+
+3/6/2026 6:15 pm
+Session 2:
+
+In Session 2, the project moved beyond the basic skeleton from Session 1 and began implementing the actual parser logic. I added the helper functions needed to process expressions character by character, including skip-whitespace to ignore leading spaces and parse-number to read numeric values from the input. I then expanded eval-expression so it could recognize numbers and operators, and added the recursive helper functions eval-negate, eval-plus, eval-times, and eval-divide to support unary negation and the main binary operations. This gave the program its first real parsing structure and made it capable of evaluating prefix expressions internally, even though the main loop was still using placeholder output at this stage.
+
+One issue that came up during this session was with loading mode.rkt. At first, I tried using require, then switched to include, and ran into repeated errors involving prompt? being undefined. After checking both files more carefully, I realized the issue came from how mode.rkt was structured and how it was being referenced from the main file. I decided not to modify the provided mode.rkt file directly and instead adjusted the way it was loaded so that prompt? could be accessed without changing the assignment file itself. That debugging process took some extra time, but it resolved the import problem and let me keep building the parser without changing the provided support file.
+
+note to self, start next project earlier

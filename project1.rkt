@@ -4,7 +4,78 @@
 
 #lang racket
 
-(require "mode.rkt")
+;; Load mode.rkt without modifying it
+(dynamic-require "mode.rkt" 0)
+(define mode-ns (module->namespace "mode.rkt"))
+(define prompt?
+  (parameterize ([current-namespace mode-ns])
+    (namespace-variable-value 'prompt?)))
+
+;; skip leading whitespace
+(define (skip-whitespace chars)
+  (cond
+    [(null? chars) chars]
+    [(char-whitespace? (car chars))
+     (skip-whitespace (cdr chars))]
+    [else chars]))
+
+;; parse a sequence of digits
+;; returns: (list value remaining-chars)
+(define (parse-number chars)
+  (define (collect digits rest)
+    (cond
+      [(and (not (null? rest)) (char-numeric? (car rest)))
+       (collect (cons (car rest) digits) (cdr rest))]
+      [else
+       (list (string->number (list->string (reverse digits))) rest)]))
+  (collect '() chars))
+
+;; unary negation
+(define (eval-negate chars history)
+  (let* ([rest (skip-whitespace (cdr chars))]
+         [result (eval-expression rest history)])
+    (if result
+        (list (- (first result)) (second result))
+        #f)))
+
+;; binary addition
+(define (eval-plus chars history)
+  (let* ([rest (skip-whitespace (cdr chars))]
+         [left-result (eval-expression rest history)])
+    (if (not left-result)
+        #f
+        (let* ([right-start (skip-whitespace (second left-result))]
+               [right-result (eval-expression right-start history)])
+          (if right-result
+              (list (+ (first left-result) (first right-result))
+                    (second right-result))
+              #f)))))
+
+;; binary multiplication
+(define (eval-times chars history)
+  (let* ([rest (skip-whitespace (cdr chars))]
+         [left-result (eval-expression rest history)])
+    (if (not left-result)
+        #f
+        (let* ([right-start (skip-whitespace (second left-result))]
+               [right-result (eval-expression right-start history)])
+          (if right-result
+              (list (* (first left-result) (first right-result))
+                    (second right-result))
+              #f)))))
+
+;; binary division
+(define (eval-divide chars history)
+  (let* ([rest (skip-whitespace (cdr chars))]
+         [left-result (eval-expression rest history)])
+    (if (not left-result)
+        #f
+        (let* ([right-start (skip-whitespace (second left-result))]
+               [right-result (eval-expression right-start history)])
+          (if (or (not right-result) (= (first right-result) 0))
+              #f
+              (list (quotient (first left-result) (first right-result))
+                    (second right-result)))))))
 
 ;; main entry point
 (define (main)
@@ -21,13 +92,26 @@
       [(eof-object? line) (void)]
       [(string=? line "quit") (void)]
       [else
-       ;; evaluation logic will be added later
+       ;; evaluation logic will be expanded in later sessions
        (displayln "Error: Invalid Expression")
        (eval-loop history)])))
 
-;; placeholder for expression evaluation
+;; expression evaluator
+;; returns (list value remaining-chars) or #f on error
 (define (eval-expression chars history)
-  ;; implementation will be added later
-  #f)
+  (let ([chars (skip-whitespace chars)])
+    (cond
+      [(null? chars) #f]
+      [(char-numeric? (car chars))
+       (parse-number chars)]
+      [(char=? (car chars) #\-)
+       (eval-negate chars history)]
+      [(char=? (car chars) #\+)
+       (eval-plus chars history)]
+      [(char=? (car chars) #\*)
+       (eval-times chars history)]
+      [(char=? (car chars) #\/)
+       (eval-divide chars history)]
+      [else #f])))
 
 (main)
