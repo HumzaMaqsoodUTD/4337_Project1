@@ -78,3 +78,58 @@ Error: Invalid Expression
 > 
 
 Just copied it straight from DrRacket
+
+3/6/2026 8:31
+Session 4: final testing and project cleanup
+
+In this second to final session, I focused on polishing the program and performing thorough testing to ensure everything behaved correctly. I ran a variety of test cases to verify that valid prefix expressions, nested expressions, and history references were evaluated correctly. I also tested invalid cases such as extra tokens after a valid expression, invalid history references like $0, divide-by-zero scenarios, and malformed inputs. These tests confirmed that the calculator correctly prints results for valid expressions and displays the required error message for invalid ones.
+
+After confirming the program worked as expected, I made a few small improvements to the code for clarity and efficiency. I simplified the prompt handling using a more idiomatic Racket structure, adjusted the history lookup logic so it no longer needed to reverse the history list during every lookup, and added handling for blank input lines so they are ignored rather than treated as errors. These changes did not alter the functionality of the program, but improved readability and performance. Finally, I reviewed the entire file to ensure the implementation matched the assignment requirements and prepared the project for submission.
+
+> 5
+1: 5.0
+> 12
+2: 12.0
+> +1 2
+3: 3.0
+> *2 3
+4: 6.0
+> /8 2
+5: 4.0
+> /7 2
+6: 3.0
+> -5
+7: -5.0
+> --5
+8: 5.0
+> +*2 3 4
+9: 10.0
+> *+1 2 3
+10: 9.0
+> /+8 4 3
+11: 4.0
+> +$1 $2
+12: 17.0
+> *$3 2
+13: 6.0
+> - $1
+14: -5.0
+> + $1 * 2 3
+15: 11.0
+> 
+> abc
+Error: Invalid Expression
+> $99
+Error: Invalid Expression
+> 4 5
+Error: Invalid Expression
+> +$
+Error: Invalid Expression
+> +1             2
+16: 3.0
+> -           5
+17: -5.0
+> quit
+> 
+
+Overall the testing seems to be fine, and the quality of life updates went smoothly! I'm really happy with how that went!!

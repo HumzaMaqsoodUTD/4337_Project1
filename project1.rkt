@@ -34,7 +34,7 @@
 (define (history-ref n history)
   (if (or (< n 1) (> n (length history)))
       #f
-      (list-ref (reverse history) (- n 1))))
+      (list-ref history (- (length history) n))))
 
 ;; parse a history reference like $1 or $2
 (define (parse-history chars history)
@@ -103,11 +103,11 @@
 ;; returns the final numeric value or #f if invalid
 (define (evaluate-line line history)
   (let* ([chars (string->list line)]
-         [result (eval-expression chars history)])
-    (if result
-        (let ([remaining (skip-whitespace (second result))])
+         [parse-result (eval-expression chars history)])
+    (if parse-result
+        (let ([remaining (skip-whitespace (second parse-result))])
           (if (null? remaining)
-              (first result)
+              (first parse-result)
               #f))
         #f)))
 
@@ -117,14 +117,15 @@
 
 ;; main evaluation loop
 (define (eval-loop history)
-  (if prompt?
-      (display "> ")
-      (void))
+  (when prompt?
+    (display "> "))
   
   (let ([line (read-line)])
     (cond
       [(eof-object? line) (void)]
       [(string=? line "quit") (void)]
+      [(string=? (string-trim line) "")
+       (eval-loop history)]
       [else
        (let ([value (evaluate-line line history)])
          (if value
